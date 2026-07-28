@@ -135,6 +135,7 @@ export default function RegisterPage() {
                             )} */}
                         </div>
 
+                        {/* make this button toggle */}
                         <div>
                             <label className="text-sm font-medium text-foreground block mb-3">Role :</label>
                             <div className="grid grid-cols-2 gap-3">
