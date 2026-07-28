@@ -69,13 +69,13 @@ export function Navbar() {
                             </>
                         ) : (
                             <>
-                                <Link href="/auth/login">
-                                    <Button size="sm" variant="ghost">
+                                <Link href="/login">
+                                    <Button size="lg" variant="ghost">
                                         Log In
                                     </Button>
                                 </Link>
-                                <Link href="/auth/register">
-                                    <Button size="sm">Get Started</Button>
+                                <Link href="/register">
+                                    <Button size="lg">Get Started</Button>
                                 </Link>
                             </>
                         )}
