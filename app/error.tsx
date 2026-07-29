@@ -12,7 +12,7 @@ export default function Error({
     reset: () => void
 }) {
     useEffect(() => {
-        console.error('[v0] Error caught:', error.message)
+        console.error('Error:', error.message)
     }, [error])
 
     return (

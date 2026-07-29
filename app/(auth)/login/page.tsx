@@ -4,7 +4,7 @@
 // import { loginSchema, type LoginInput } from '@/lib/schemas'
 // import { useAuth } from '@/lib/auth-context'
 
-import { useState } from 'react'
+import { useActionState, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -13,40 +13,51 @@ import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { toast } from 'sonner'
 import { Mail, Lock, Home } from 'lucide-react'
+import { loginAction } from '../_actions/authActions'
+import Loading from '@/app/loading'
+import { Spinner } from '@/components/ui/spinner'
 
 export default function LoginPage() {
     const router = useRouter()
+    const [state, action, pending] = useActionState(loginAction, false)
     // const { login } = useAuth()
-    const [isLoading, setIsLoading] = useState(false)
 
+    useEffect(() => {
+        if (!state) {
+            return
+        }
 
-    const onSubmit = async (data: any) => {
-        setIsLoading(true)
-    }
+        if (state.success) {
+            toast.success(state.message || "Logged in successfully.")
+
+        }
+
+        if (!state.success) {
+            toast.error(state.message || "Unable to login.")
+        }
+    }, [state])
 
     return (
         <div className="min-h-screen bg-background flex items-center justify-center px-4 py-12">
             <div className="w-full max-w-md">
-                {/* Logo */}
                 <Link href="/" className="flex items-center justify-center gap-2 mb-8">
                     <Home className="w-6 h-6 text-primary" />
                     <span className="text-2xl font-bold">RentNest</span>
                 </Link>
 
-                {/* Card */}
                 <Card className="p-8">
                     <h1 className="text-3xl font-bold text-foreground text-center">Welcome Back!</h1>
                     <p className="text-center text-muted-foreground mb-8">
-                        Sign in to your account
+                        Log in to your account
                     </p>
 
-                    <form onSubmit={() => { console.log(`form submitted`) }} className="space-y-4">
-                        {/* Email */}
+                    <form action={action} className="space-y-4">
                         <div>
                             <label className="text-sm font-medium text-foreground block mb-2">Email</label>
                             <div className="relative">
                                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                                 <Input
+                                    name="email"
                                     type="email"
                                     placeholder="jhondoe@gmail.com"
                                     className="pl-10"
@@ -57,12 +68,12 @@ export default function LoginPage() {
                             )} */}
                         </div>
 
-                        {/* Password */}
                         <div>
                             <label className="text-sm font-medium text-foreground block mb-2">Password</label>
                             <div className="relative">
                                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                                 <Input
+                                    name="password"
                                     type="password"
                                     placeholder="your strong password"
                                     className="pl-10"
@@ -73,24 +84,21 @@ export default function LoginPage() {
                             )} */}
                         </div>
 
-                        {/* Submit Button */}
-                        <Button type="submit" className="w-full h-10" disabled={isLoading}>
-                            {isLoading ? 'Signing in...' : 'Sign In'}
+                        <Button type="submit" className="w-full h-10">
+                            {pending ? <Spinner /> : "Log In"}
                         </Button>
                     </form>
 
-                    {/* Demo Credentials */}
                     <div className="mt-6 p-4 bg-muted rounded-lg border border-border">
                         <p className="text-xs font-semibold text-foreground mb-2">Demo Credentials:</p>
                         <div className="space-y-1 text-xs text-muted-foreground">
-                            <p><strong>Tenant:</strong> tenant@example.com</p>
-                            <p><strong>Landlord:</strong> landlord@example.com</p>
-                            <p><strong>Admin:</strong> admin@example.com</p>
-                            <p><strong>Password:</strong> password123</p>
+                            <p><strong>Tenant:</strong> tenant@rentnest.com</p>
+                            <p><strong>Landlord:</strong> landlord@rentnest.com</p>
+                            <p><strong>Admin:</strong> admin@rentnest.com</p>
+                            <p><strong>Password:</strong> 123</p>
                         </div>
                     </div>
 
-                    {/* Sign Up Link */}
                     <div className="text-center mt-6">
                         <p className="text-muted-foreground">
                             Don't have an account?{' '}
@@ -101,7 +109,6 @@ export default function LoginPage() {
                     </div>
                 </Card>
 
-                {/* Back to Home */}
                 <div className="text-center mt-6">
                     <Link href="/" className="text-muted-foreground hover:text-foreground transition">
                         Back to Home
