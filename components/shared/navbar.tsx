@@ -1,12 +1,18 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { Home, Menu, X, User, LogOut } from 'lucide-react'
+import { Home, Menu, X, User, LogOut, LayoutDashboard } from 'lucide-react'
 import { useState } from 'react'
 import { useAuthStore, UserRoles } from '@/lib/useAuthStore'
-
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 export function Navbar() {
     const { user, logout } = useAuthStore()
@@ -39,23 +45,34 @@ export function Navbar() {
 
                     <div className="hidden md:flex items-center gap-3">
                         {user ? (
-                            <>
-                                <div className="flex items-center gap-2 px-3 py-1 rounded-lg bg-muted">
-                                    <User className="w-4 h-4 text-muted-foreground" />
-                                    <span className="text-sm text-foreground">{user.name}</span>
-                                </div>
-                                {dashboardPath && (
-                                    <Link href={dashboardPath}>
-                                        <Button size="sm" variant="outline">
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" size="icon" className="rounded-full">
+                                        <User className="w-4 h-4" />
+                                        <span className="sr-only">User menu</span>
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end" className="w-56">
+                                    <DropdownMenuLabel>
+                                        <div className="flex flex-col space-y-1 text-center">
+                                            <p className="text-sm font-medium leading-none">{user.name}</p>
+                                            <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
+                                        </div>
+                                    </DropdownMenuLabel>
+                                    <DropdownMenuSeparator />
+                                    {dashboardPath && (
+                                        <DropdownMenuItem className="hover:text-red-600">
+                                            <LayoutDashboard className="w-4 h-5 mr-2" />
                                             Dashboard
-                                        </Button>
-                                    </Link>
-                                )}
-                                <Button size="sm" variant="ghost" className="gap-2">
-                                    <LogOut className="w-4 h-4" />
-                                    Logout
-                                </Button>
-                            </>
+                                        </DropdownMenuItem>
+                                    )}
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem onClick={logout} className="hover:text-red-600">
+                                        <LogOut className="w-4 h-5 mr-2" />
+                                        Logout
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
                         ) : (
                             <>
                                 <Link href="/login">
@@ -75,27 +92,23 @@ export function Navbar() {
                         onClick={() => setIsOpen(!isOpen)}
                         aria-label="Toggle menu"
                     >
-                        {isOpen ? (
-                            <X className="w-5 h-5" />
-                        ) : (
-                            <Menu className="w-5 h-5" />
-                        )}
+                        {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
                     </button>
                 </div>
 
                 {isOpen && (
-                    <div className="md:hidden border-t border-border/40 bg-background/50 backdrop-blur-sm">
+                    <div className="md:hidden border-t border-border/40 bg-background/95 backdrop-blur-sm">
                         <div className="px-4 py-3 space-y-2">
                             <Link
                                 href="/"
-                                className="block px-3 py-2 text-sm text-foreground hover:bg-muted rounded-lg transition"
+                                className="block px-3 py-2 text-sm text-center text-foreground hover:bg-muted rounded-lg transition"
                                 onClick={() => setIsOpen(false)}
                             >
                                 Home
                             </Link>
                             <Link
                                 href="/browse"
-                                className="block px-3 py-2 text-sm text-foreground hover:bg-muted rounded-lg transition"
+                                className="block px-3 py-2 text-sm text-center text-foreground hover:bg-muted rounded-lg transition"
                                 onClick={() => setIsOpen(false)}
                             >
                                 Browse Properties
@@ -104,28 +117,44 @@ export function Navbar() {
                             <div className="h-px bg-border/40 my-2" />
 
                             {user ? (
-                                <>
-                                    <div className="px-3 py-2 text-sm text-muted-foreground">
-                                        Signed in as <span className="text-foreground font-medium">{user.name}</span>
+                                <div className="space-y-3 pt-1">
+                                    <div className="flex items-center gap-3 px-3 py-2">
+                                        <span className="flex size-9 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                                            <User className="size-4" aria-hidden="true" />
+                                        </span>
+                                        <div className="min-w-0">
+                                            <p className="truncate text-sm font-medium text-foreground">
+                                                {user.name}
+                                            </p>
+                                            <p className="truncate text-xs text-muted-foreground">
+                                                {user.email}
+                                            </p>
+                                        </div>
                                     </div>
+
                                     {dashboardPath && (
-                                        <Link href={dashboardPath} onClick={() => setIsOpen(false)}>
-                                            <Button variant="outline" size="sm" className="w-full justify-start">
+                                        <Link href={dashboardPath} onClick={() => setIsOpen(false)} className="block">
+                                            <Button variant="outline" size="sm" className="w-full h-8">
                                                 Dashboard
                                             </Button>
                                         </Link>
                                     )}
+
                                     <Button
                                         variant="ghost"
                                         size="sm"
-                                        className="w-full justify-start gap-2 text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20"
+                                        className="w-full text-center gap-2 hover:text-destructive h-8 "
+                                        onClick={() => {
+                                            logout()
+                                            setIsOpen(false)
+                                        }}
                                     >
-                                        <LogOut className="w-4 h-4" />
+                                        <LogOut className="w-4 h-10" />
                                         Logout
                                     </Button>
-                                </>
+                                </div>
                             ) : (
-                                <div className="flex flex-col gap-2">
+                                <div className="flex flex-col gap-2 pt-1">
                                     <Link href="/login" onClick={() => setIsOpen(false)}>
                                         <Button variant="outline" size="lg" className="w-full">
                                             Log In

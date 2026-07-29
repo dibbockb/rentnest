@@ -24,6 +24,7 @@
 .DS_Store
 *.pem
 draft.txt
+...codebase.xml
 
 # debug
 npm-debug.log*
