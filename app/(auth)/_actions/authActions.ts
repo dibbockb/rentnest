@@ -31,6 +31,7 @@ export const loginAction = async (prevState: LoginState, formData: FormData) => 
 
         if (result.success) {
             const cookieStore = await cookies()
+
             cookieStore.set("accessToken", result.data.accessToken, {
                 httpOnly: true,
                 maxAge: 60 * 60 * 24,

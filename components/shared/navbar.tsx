@@ -1,32 +1,21 @@
 'use client'
 
-// import { useAuth } from '@/lib/auth-context'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Home, Menu, X, User, LogOut } from 'lucide-react'
 import { useState } from 'react'
+import { useAuthStore, UserRoles } from '@/lib/useAuthStore'
+
 
 export function Navbar() {
-    // const { user, logout } = useAuth()
-    const router = useRouter()
-    const pathname = usePathname()
+    const { user, logout } = useAuthStore()
     const [isOpen, setIsOpen] = useState(false)
 
-    const handleLogout = () => {
-        // logout()
-        router.push('/')
-        setIsOpen(false)
-    }
-
-    //     const isAuth = pathname.startsWith('/auth')
-    // 
-    //     if (isAuth) {
-    //         return null
-    //     }
-
-    const dashboardPath = 'TENANT'
-    const user = false
+    const dashboardPath =
+        user?.role === UserRoles.ADMIN ? '/admin-dashboard' :
+            user?.role === UserRoles.LANDLORD ? '/landlord-dashboard' :
+                user?.role === UserRoles.TENANT ? '/dashboard/dashboard' : '/login'
 
     return (
         <nav className="sticky top-0 z-50 border-b border-border/40 bg-background/80 backdrop-blur-md">
@@ -53,7 +42,7 @@ export function Navbar() {
                             <>
                                 <div className="flex items-center gap-2 px-3 py-1 rounded-lg bg-muted">
                                     <User className="w-4 h-4 text-muted-foreground" />
-                                    <span className="text-sm text-foreground">UserName</span>
+                                    <span className="text-sm text-foreground">{user.name}</span>
                                 </div>
                                 {dashboardPath && (
                                     <Link href={dashboardPath}>
@@ -62,7 +51,7 @@ export function Navbar() {
                                         </Button>
                                     </Link>
                                 )}
-                                <Button onClick={handleLogout} size="sm" variant="ghost" className="gap-2">
+                                <Button size="sm" variant="ghost" className="gap-2">
                                     <LogOut className="w-4 h-4" />
                                     Logout
                                 </Button>
@@ -117,7 +106,7 @@ export function Navbar() {
                             {user ? (
                                 <>
                                     <div className="px-3 py-2 text-sm text-muted-foreground">
-                                        Signed in as <span className="text-foreground font-medium">UserName</span>
+                                        Signed in as <span className="text-foreground font-medium">{user.name}</span>
                                     </div>
                                     {dashboardPath && (
                                         <Link href={dashboardPath} onClick={() => setIsOpen(false)}>
@@ -127,7 +116,6 @@ export function Navbar() {
                                         </Link>
                                     )}
                                     <Button
-                                        onClick={handleLogout}
                                         variant="ghost"
                                         size="sm"
                                         className="w-full justify-start gap-2 text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20"
@@ -137,18 +125,18 @@ export function Navbar() {
                                     </Button>
                                 </>
                             ) : (
-                                <>
-                                    <Link href="/auth/login" onClick={() => setIsOpen(false)}>
-                                        <Button variant="outline" size="sm" className="w-full">
+                                <div className="flex flex-col gap-2">
+                                    <Link href="/login" onClick={() => setIsOpen(false)}>
+                                        <Button variant="outline" size="lg" className="w-full">
                                             Log In
                                         </Button>
                                     </Link>
-                                    <Link href="/auth/register" onClick={() => setIsOpen(false)}>
-                                        <Button size="sm" className="w-full">
+                                    <Link href="/register" onClick={() => setIsOpen(false)}>
+                                        <Button size="lg" className="w-full">
                                             Get Started
                                         </Button>
                                     </Link>
-                                </>
+                                </div>
                             )}
                         </div>
                     </div>

@@ -3,9 +3,9 @@
 // import { zodResolver } from '@hookform/resolvers/zod'
 // import { loginSchema, type LoginInput } from '@/lib/schemas'
 // import { useAuth } from '@/lib/auth-context'
+// import { useForm } from 'react-hook-form'
 
 import { useActionState, useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
@@ -14,28 +14,34 @@ import { Input } from '@/components/ui/input'
 import { toast } from 'sonner'
 import { Mail, Lock, Home } from 'lucide-react'
 import { loginAction } from '../_actions/authActions'
-import Loading from '@/app/loading'
 import { Spinner } from '@/components/ui/spinner'
+import { useAuthStore } from '@/lib/useAuthStore'
+import { jwtDecode } from 'jwt-decode'
 
 export default function LoginPage() {
     const router = useRouter()
+    const setUser = useAuthStore((state) => state.setUser)
     const [state, action, pending] = useActionState(loginAction, false)
-    // const { login } = useAuth()
 
     useEffect(() => {
-        if (!state) {
-            return
-        }
+        if (!state) return
 
         if (state.success) {
+            const decodedUser: any = jwtDecode(state.data.accessToken)
+            setUser({
+                id: decodedUser.id,
+                name: decodedUser.name || "User",
+                email: decodedUser.email || "",
+                role: decodedUser.role
+            })
+
             toast.success(state.message || "Logged in successfully.")
-
-        }
-
-        if (!state.success) {
+            router.push('/')
+            router.refresh()
+        } else {
             toast.error(state.message || "Unable to login.")
         }
-    }, [state])
+    }, [state, setUser, router])
 
     return (
         <div className="min-h-screen bg-background flex items-center justify-center px-4 py-12">
