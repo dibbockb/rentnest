@@ -11,32 +11,27 @@ import { Mail, Lock, Home } from 'lucide-react'
 import { loginAction } from '../_actions/authActions'
 import { Spinner } from '@/components/ui/spinner'
 import { useAuthStore } from '@/lib/useAuthStore'
-import { jwtDecode } from 'jwt-decode'
+import jwt from "jsonwebtoken"
 
 export default function LoginPage() {
     const router = useRouter()
     const setUser = useAuthStore((state) => state.setUser)
-    const [state, action, pending] = useActionState(loginAction, false)
+    const [state, action, pending] = useActionState(loginAction, null)
 
     useEffect(() => {
         if (!state) return
 
         if (state.success) {
-            const decodedUser: any = jwtDecode(state.data.accessToken)
-            setUser({
-                id: decodedUser.id,
-                name: decodedUser.name || "User",
-                email: decodedUser.email || "",
-                role: decodedUser.role
-            })
-
-            toast.success(state.message || "Logged in successfully.")
-            router.push('/')
+            if (state.user) {
+                setUser(state.user)
+            }
+            router.push("/dashboard")
             router.refresh()
+            toast.success(state.message || "Logged in successfully.")
         } else {
             toast.error(state.message || "Unable to login.")
         }
-    }, [state, setUser, router])
+    }, [state, setUser])
 
     return (
         <div className="min-h-screen bg-background flex items-center justify-center px-4 py-12">

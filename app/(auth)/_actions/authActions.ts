@@ -2,16 +2,8 @@
 
 import { RegisterInput, RegisterSchema } from "@/lib/schemas/register"
 import { cookies } from "next/headers"
-
-type LoginState = {
-    success: boolean
-    statusCode: number
-    message: string
-    data: {
-        accessToken: string
-        refreshToken: string
-    }
-} | null
+import jwt, { JwtPayload } from "jsonwebtoken"
+import { redirect } from "next/navigation"
 
 type RegisterState = {
     success: boolean
@@ -24,13 +16,11 @@ type RegisterState = {
     }
 } | null
 
-export const loginAction = async (prevState: LoginState, formData: FormData) => {
+export const loginAction = async (prevState: any, formData: FormData) => {
     const email = formData.get("email")
     const password = formData.get("password")
-    const payload = {
-        email,
-        password
-    }
+    // let redirectTo: string | null = null
+    console.log("Payload being sent:", JSON.stringify({ email, password }));
 
     try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/auth/login`, {
@@ -38,12 +28,10 @@ export const loginAction = async (prevState: LoginState, formData: FormData) => 
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password }),
         })
-
         const result = await res.json()
 
         if (result.success) {
             const cookieStore = await cookies()
-
             cookieStore.set("accessToken", result.data.accessToken, {
                 httpOnly: true,
                 maxAge: 60 * 60 * 24,
@@ -55,11 +43,42 @@ export const loginAction = async (prevState: LoginState, formData: FormData) => 
                 maxAge: 60 * 60 * 24 * 7,
                 sameSite: "lax",
             })
+            const decodedToken = jwt.decode(result.data.accessToken) as JwtPayload;
+
+            // if (decodedToken?.role === "ADMIN") {
+            //     redirectTo = "/admin-dashboard"
+            // } else if (decodedToken?.role === "LANDLORD") {
+            //     redirectTo = "/landlord-dashboard"
+            // } else if (decodedToken?.role === "TENANT") {
+            //     redirectTo = "/dashboard"
+            // }
+            // if (!redirectTo) {
+            //     return result
+            // }
+
+            return {
+                success: true,
+                message: "Logged in successfully.",
+                data: result.data,
+                user: {
+                    id: decodedToken?.id,
+                    name: decodedToken?.name || "User",
+                    email: decodedToken?.email || email,
+                    role: decodedToken?.role
+                }
+            };
         }
 
+        // if (redirectTo) {
+        //     redirect(redirectTo)
+        // }
         return result;
 
     } catch (error) {
+        if ((error as any)?.digest?.startsWith('NEXT_REDIRECT')) {
+            throw error
+        }
+        console.log(error)
         return {
             success: false,
             statusCode: 500,
@@ -68,9 +87,10 @@ export const loginAction = async (prevState: LoginState, formData: FormData) => 
         }
     }
 }
-
 export const registerAction = async (data: RegisterInput): Promise<RegisterState> => {
     const parsed = RegisterSchema.safeParse(data)
+    // let redirectTo: string | null = null
+
     if (!parsed.success) {
         return {
             success: false,
@@ -118,10 +138,29 @@ export const registerAction = async (data: RegisterInput): Promise<RegisterState
                 sameSite: "lax",
                 maxAge: 60 * 60 * 24 * 7
             })
+
+            const decodedToken = jwt.decode(loginResult.data.accessToken) as JwtPayload;
+            // if (decodedToken?.role === "ADMIN") {
+            // redirectTo = "/admin-dashboard"
+            // } else if (decodedToken?.role === "LANDLORD") {
+            // redirectTo = "/landlord-dashboard"
+            // } else if (decodedToken?.role === "TENANT") {
+            // redirectTo = "/dashboard"
         }
+        //             if (!redirectTo) {
+        //                 return loginResult
+        //             }
+        // 
+        //         }
+        //         if (redirectTo) {
+        //             redirect(redirectTo)
+        //         }
         return loginResult;
 
     } catch (error) {
+        if ((error as any)?.digest?.startsWith('NEXT_REDIRECT')) {
+            throw error
+        }
         return {
             success: false,
             statusCode: 500,

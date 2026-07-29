@@ -13,6 +13,9 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { RegisterInput, RegisterSchema } from '@/lib/schemas/register'
 import { Spinner } from '@/components/ui/spinner'
 import { registerAction } from '../_actions/authActions'
+import { useAuthStore } from '@/lib/useAuthStore'
+import jwt from "jsonwebtoken"
+
 
 export default function RegisterPage() {
     const router = useRouter()
@@ -30,20 +33,23 @@ export default function RegisterPage() {
         defaultValues: { role: defaultRole }
     })
     const selectedRole = watch('role')
-    const dashboardMap: Record<string, string> = {
-        TENANT: '/dashboard',
-        LANDLORD: '/landlord-dashboard',
-        ADMIN: '/admin-dashboard',
-    }
+    const setUser = useAuthStore((state) => state.setUser)
 
     const onSubmit = async (data: RegisterInput) => {
         setIsLoading(true)
         try {
             const result = await registerAction(data)
             if (result?.success) {
-                toast.success('Registration successful!')
-                router.push(dashboardMap[data.role] || '/dashboard')
+                const decodedUser: any = jwt.decode(result.data.accessToken)
+                setUser({
+                    id: decodedUser.id,
+                    name: decodedUser.name || "User",
+                    email: decodedUser.email || "",
+                    role: decodedUser.role
+                })
+                router.push("/dashboard")
                 router.refresh()
+                toast.success('Registration successful!')
             } else {
                 toast.error(result?.message || "Registration failed.")
             }

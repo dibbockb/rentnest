@@ -13,15 +13,16 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { toast } from 'sonner'
 
 export function Navbar() {
     const { user, logout } = useAuthStore()
     const [isOpen, setIsOpen] = useState(false)
 
-    const dashboardPath =
-        user?.role === UserRoles.ADMIN ? '/admin-dashboard' :
-            user?.role === UserRoles.LANDLORD ? '/landlord-dashboard' :
-                user?.role === UserRoles.TENANT ? '/dashboard/dashboard' : '/login'
+    const handleLogout = () => {
+        logout()
+        toast.success(`Logged out.`)
+    }
 
     return (
         <nav className="sticky top-0 z-50 border-b border-border/40 bg-background/80 backdrop-blur-md">
@@ -60,14 +61,13 @@ export function Navbar() {
                                         </div>
                                     </DropdownMenuLabel>
                                     <DropdownMenuSeparator />
-                                    {dashboardPath && (
+                                    <Link href="/dashboard">
                                         <DropdownMenuItem className="hover:text-red-600">
                                             <LayoutDashboard className="w-4 h-5 mr-2" />
                                             Dashboard
-                                        </DropdownMenuItem>
-                                    )}
+                                        </DropdownMenuItem></Link>
                                     <DropdownMenuSeparator />
-                                    <DropdownMenuItem onClick={logout} className="hover:text-red-600">
+                                    <DropdownMenuItem onClick={handleLogout} className="hover:text-red-600">
                                         <LogOut className="w-4 h-5 mr-2" />
                                         Logout
                                     </DropdownMenuItem>
@@ -132,13 +132,11 @@ export function Navbar() {
                                         </div>
                                     </div>
 
-                                    {dashboardPath && (
-                                        <Link href={dashboardPath} onClick={() => setIsOpen(false)} className="block">
-                                            <Button variant="outline" size="sm" className="w-full h-8">
-                                                Dashboard
-                                            </Button>
-                                        </Link>
-                                    )}
+                                    <Link href="/dashboard" onClick={() => setIsOpen(false)} className="block">
+                                        <Button variant="outline" size="sm" className="w-full h-8">
+                                            Dashboard
+                                        </Button>
+                                    </Link>
 
                                     <Button
                                         variant="ghost"
