@@ -14,12 +14,14 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { toast } from 'sonner'
+import { logoutUser } from '@/app/(auth)/_actions/authActions'
 
 export function Navbar() {
     const { user, logout } = useAuthStore()
     const [isOpen, setIsOpen] = useState(false)
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
+        logoutUser()
         logout()
         toast.success(`Logged out.`)
     }
