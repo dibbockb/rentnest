@@ -28,8 +28,12 @@ export async function proxy(request: NextRequest) {
 
     //authenticate
     const isPublic = PUBLIC_ROUTES.some((route) => pathName === route || pathName.startsWith(route + "/"))
+    // || /^\/property\/[^/]+$/.test(pathName)
+
     if (!accessToken && !isPublic) {
-        return NextResponse.redirect(new URL(`/login`, request.url))
+        const loginUrl = new URL(`/login`, request.url)
+        loginUrl.searchParams.set("redirectTo", pathName)
+        return NextResponse.redirect(loginUrl)
     }
 
     //redirect RBAC

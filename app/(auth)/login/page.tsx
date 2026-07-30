@@ -2,7 +2,7 @@
 
 import { useActionState, useEffect, useState } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -11,11 +11,12 @@ import { Mail, Lock, Home } from 'lucide-react'
 import { loginAction } from '../_actions/authActions'
 import { Spinner } from '@/components/ui/spinner'
 import { useAuthStore } from '@/lib/useAuthStore'
-import jwt from "jsonwebtoken"
 
 export default function LoginPage() {
     const router = useRouter()
     const setUser = useAuthStore((state) => state.setUser)
+    const searchParams = useSearchParams()
+    const redirectTo = searchParams.get("redirectTo") ?? null;
     const [state, action, pending] = useActionState(loginAction, null)
 
     useEffect(() => {
@@ -25,8 +26,14 @@ export default function LoginPage() {
             if (state.user) {
                 setUser(state.user)
             }
-            router.push("/dashboard")
-            router.refresh()
+            if (redirectTo && typeof redirectTo === "string" && redirectTo.startsWith("/") && !redirectTo.startsWith("//")) {
+                router.push(redirectTo)
+                router.refresh()
+            }
+            else {
+                router.push("/dashboard")
+                router.refresh()
+            }
             toast.success(state.message || "Logged in successfully.")
         } else {
             toast.error(state.message || "Unable to login.")

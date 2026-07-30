@@ -214,7 +214,7 @@ export default function PropertyDetailsPage({ property }: { property: IProperty 
                         {/* Action Buttons */}
                         <div className="space-y-3 pt-4">
                             <Button onClick={() => setShowConfirm(true)} className="w-full px-4 py-3 h-12 text-base">
-                                Request to Rent
+                                {isSubmitting || showConfirm ? <Spinner /> : "Request to Rent"}
                             </Button>
 
                             <AlertDialog open={showConfirm} onOpenChange={setShowConfirm}>
