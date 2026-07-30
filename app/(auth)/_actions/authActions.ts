@@ -19,8 +19,6 @@ type RegisterState = {
 export const loginAction = async (prevState: any, formData: FormData) => {
     const email = formData.get("email")
     const password = formData.get("password")
-    // let redirectTo: string | null = null
-    console.log("Payload being sent:", JSON.stringify({ email, password }));
 
     try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/auth/login`, {
@@ -78,7 +76,6 @@ export const loginAction = async (prevState: any, formData: FormData) => {
         if ((error as any)?.digest?.startsWith('NEXT_REDIRECT')) {
             throw error
         }
-        console.log(error)
         return {
             success: false,
             statusCode: 500,
@@ -89,7 +86,6 @@ export const loginAction = async (prevState: any, formData: FormData) => {
 }
 export const registerAction = async (data: RegisterInput): Promise<RegisterState> => {
     const parsed = RegisterSchema.safeParse(data)
-    // let redirectTo: string | null = null
 
     if (!parsed.success) {
         return {

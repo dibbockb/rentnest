@@ -56,7 +56,6 @@ export default function Page() {
         <div className="min-h-screen bg-background">
             <Navbar />
 
-            {/* Hero Section */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32">
                 <div className="text-center space-y-8">
                     <div className="space-y-4">
@@ -86,7 +85,6 @@ export default function Page() {
                 </div>
             </section>
 
-            {/* Features Grid */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-border">
                 <div className="space-y-16">
                     <div className="text-center space-y-4">
@@ -108,7 +106,6 @@ export default function Page() {
                 </div>
             </section>
 
-            {/* How It Works */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-border">
                 <div className="space-y-16">
                     <div className="text-center space-y-4">
@@ -140,7 +137,6 @@ export default function Page() {
                 </div>
             </section>
 
-            {/* Testimonials */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-border">
                 <div className="space-y-16">
                     <div className="text-center space-y-4">
@@ -172,7 +168,6 @@ export default function Page() {
                 </div>
             </section>
 
-            {/* FAQ Section */}
             <section className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-border">
                 <div className="space-y-12">
                     <div className="text-center space-y-4">
@@ -182,21 +177,20 @@ export default function Page() {
 
                     <div className="space-y-4">
                         {faqs.map((faq, idx) => (
-                            <details key={idx} className="group border border-border/50 rounded-lg p-6 hover:border-border/80 transition-colors cursor-pointer">
-                                <summary className="flex items-center justify-between font-semibold text-foreground text-lg list-none">
+                            <details key={idx} className="group border border-border/50 rounded-lg p-6 hover:border-border/80 cursor-pointer transition-all duration-400">
+                                <summary className="flex items-center justify-between font-semibold text-foreground text-lg list-none transition-all duration-400">
                                     {faq.question}
-                                    <span className="transition-transform group-open:rotate-180">
+                                    <span className="group-open:rotate-180 transition-all duration-400">
                                         <ChevronRight className="w-5 h-5 text-muted-foreground" />
                                     </span>
                                 </summary>
-                                <p className="text-muted-foreground mt-4 leading-relaxed">{faq.answer}</p>
+                                <p className="text-muted-foreground mt-4 leading-relaxed transition-all duration-400">{faq.answer}</p>
                             </details>
                         ))}
                     </div>
                 </div>
             </section>
 
-            {/* CTA Section */}
             <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-border">
                 <div className="bg-primary/5 border border-primary/10 rounded-2xl p-12 md:p-16 text-center space-y-8">
                     <div className="space-y-4">
@@ -220,7 +214,6 @@ export default function Page() {
                 </div>
             </section>
 
-            {/* Footer */}
             <footer className="border-t border-border py-12 px-4 sm:px-6 lg:px-8 bg-card/50 mt-20">
                 <div className="max-w-7xl mx-auto">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
