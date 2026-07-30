@@ -8,11 +8,25 @@ import Link from 'next/link'
 import { Navbar } from '@/components/shared/navbar'
 import { IProperty } from '@/app/(properties)/_actions/getAllProperties'
 import { toast } from 'sonner'
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
+import { submitRequest } from '@/app/(properties)/_actions/submitRequest'
+import { Spinner } from './ui/spinner'
 
 export default function PropertyDetailsPage({ property }: { property: IProperty }) {
     const [liked, setLiked] = useState(false)
     const [selectedImageIndex, setSelectedImageIndex] = useState(0)
     const [imageLoading, setImageLoading] = useState(true)
+    const [showConfirm, setShowConfirm] = useState(false)
+    const [isSubmitting, setIsSubmitting] = useState(false)
 
     if (!property) {
         return (
@@ -21,8 +35,8 @@ export default function PropertyDetailsPage({ property }: { property: IProperty 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
                     <h1 className="text-2xl font-bold text-foreground mb-2">Property not found</h1>
                     <p className="text-muted-foreground mb-6">This property doesn&apos;t exist or has been removed.</p>
-                    <Link href="/properties">
-                        <Button>Back to Properties</Button>
+                    <Link href="/browse">
+                        <Button variant={'default'} className="w-40 h-9">Back to Properties</Button>
                     </Link>
                 </div>
             </div>
@@ -39,8 +53,18 @@ export default function PropertyDetailsPage({ property }: { property: IProperty 
         setImageLoading(true)
     }
 
-    const handleSubmitRentalRequest = (id: string) => {
-        console.log(id, "clicked for rental req")
+    const handleConfirmRequest = async () => {
+        setIsSubmitting(true)
+        const result = await submitRequest(property.id)
+
+        if (result.success) {
+            toast.success("Request sent!")
+        } else {
+            toast.error(result.message || "Could not send request.")
+        }
+
+        setIsSubmitting(false)
+        setShowConfirm(false)
     }
 
     const handleShare = () => {
@@ -189,7 +213,28 @@ export default function PropertyDetailsPage({ property }: { property: IProperty 
 
                         {/* Action Buttons */}
                         <div className="space-y-3 pt-4">
-                            <Button onClick={() => { handleSubmitRentalRequest(property.id) }} className="w-full px-4 py-3 h-12 text-base">Request to Rent</Button>
+                            <Button onClick={() => setShowConfirm(true)} className="w-full px-4 py-3 h-12 text-base">
+                                Request to Rent
+                            </Button>
+
+                            <AlertDialog open={showConfirm} onOpenChange={setShowConfirm}>
+                                <AlertDialogContent size='sm'>
+                                    <AlertDialogHeader>
+                                        <AlertDialogTitle className="text-2xl font-medium">Send rental request?</AlertDialogTitle>
+                                        <AlertDialogDescription className="text-sm font-light">
+                                            The landlord will review and approve your request first. You&apos;ll need to checkout to confirm the rental.
+                                        </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                        <AlertDialogCancel className="h-10" disabled={isSubmitting}>Cancel</AlertDialogCancel>
+                                        <AlertDialogAction className="h-10" onClick={handleConfirmRequest} disabled={isSubmitting}>
+                                            {isSubmitting ? <Spinner /> : 'Send Request'}
+                                        </AlertDialogAction>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                            </AlertDialog>
+
+
                             <div className="grid grid-cols-2 gap-3 transition-all duration-500">
                                 <Button
                                     variant="outline"

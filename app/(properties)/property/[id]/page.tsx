@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import { getPropertyDetails } from "../../_actions/getPropertyDetails";
 import PropertyDetailsPage from "@/components/property-page";
 
