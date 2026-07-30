@@ -78,7 +78,7 @@ export default function PropertyDetailsPage({ property }: { property: IProperty 
             <Navbar />
 
             <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <Link href="/properties">
+                <Link href="/browse">
                     <Button variant="ghost" className="gap-2 mb-6 px-3 py-2">
                         <ArrowLeft className="w-4 h-4" />
                         Back
