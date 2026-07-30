@@ -13,13 +13,13 @@ export function PropertyCard({ property }: { property: IProperty }) {
 
     return (
         <Link href={`/property/${property.id}`}>
-            <div className="group cursor-pointer h-full flex flex-col">
+            <div className="group cursor-pointer h-full flex flex-col hover:bg-secondary p-3 rounded-xl duration-500">
                 <div className="relative w-full aspect-video bg-muted rounded-lg overflow-hidden mb-4">
                     <Image
                         src={property.images[0]}
                         alt={`${property.category.name} in ${property.location}`}
                         fill
-                        className={`object-cover group-hover:scale-105 transition-transform duration-300 ${imageLoading ? 'blur-sm' : 'blur-0'
+                        className={`object-cover group-hover:scale-108 transition-transform duration-500 ${imageLoading ? 'blur-sm' : 'blur-0'
                             }`}
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                         onLoad={() => setImageLoading(false)}

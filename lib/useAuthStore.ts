@@ -1,17 +1,13 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-export enum UserRoles {
-    TENANT,
-    LANDLORD,
-    ADMIN
-}
+export type UserRole = 'TENANT' | 'LANDLORD' | 'ADMIN';
 
 interface UserInterface {
     id: string,
     name: string,
     email: string,
-    role: UserRoles
+    role: UserRole
 }
 
 interface AuthState {

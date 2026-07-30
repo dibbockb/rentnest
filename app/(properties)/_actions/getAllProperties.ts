@@ -5,12 +5,22 @@ export interface IProperty {
     location: string,
     price: number,
     images: string[],
-    landlord_id: Date,
+    landlord_id: string,
     created_at: Date,
     updated_at: Date,
     category: {
         id: string,
         name: string
+    }
+    landlord?: {
+        id: string,
+        name: string,
+        email: string,
+        role: string,
+        profilePhoto: string,
+        is_banned: boolean,
+        created_at: Date,
+        updated_at: Date
     }
 }
 
@@ -22,10 +32,6 @@ export const getAllProperties = async () => {
         return json?.data?.result || []
 
     } catch (error) {
-        return {
-            success: false,
-            statusCode: 500,
-            message: "Unable to get properties. Please try again.", error,
-        }
+        return []
     }
 }

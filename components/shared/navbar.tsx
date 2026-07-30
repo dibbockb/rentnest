@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Home, Menu, X, User, LogOut, LayoutDashboard } from 'lucide-react'
 import { useState } from 'react'
-import { useAuthStore, UserRoles } from '@/lib/useAuthStore'
+import { useAuthStore } from '@/lib/useAuthStore'
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -41,6 +41,9 @@ export function Navbar() {
                         </Link>
                         <Link href="/browse" className="text-sm text-foreground/80 hover:text-foreground px-3 py-2 transition">
                             Browse
+                        </Link>
+                        <Link href="/dashboard" className="text-sm text-foreground/80 hover:text-foreground px-3 py-2 transition">
+                            Dashboard
                         </Link>
                     </div>
 
@@ -113,7 +116,6 @@ export function Navbar() {
                             >
                                 Browse Properties
                             </Link>
-
                             <div className="h-px bg-border/40 my-2" />
 
                             {user ? (
