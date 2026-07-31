@@ -19,7 +19,7 @@ import {
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 import { submitRequest } from '@/app/(properties)/_actions/submitRequest'
-import { Spinner } from './ui/spinner'
+import { Spinner } from '../ui/spinner'
 
 export default function PropertyDetailsPage({ property }: { property: IProperty }) {
     const [liked, setLiked] = useState(false)

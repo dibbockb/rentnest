@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import { PropertyCard } from '@/components/property-card'
+import { PropertyCard } from '@/components/property/property-card'
 import { Button } from '@/components/ui/button'
 import { Search, X, ChevronDown } from 'lucide-react'
 import { Navbar } from '@/components/shared/navbar'

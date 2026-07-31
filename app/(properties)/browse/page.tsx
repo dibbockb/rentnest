@@ -1,4 +1,4 @@
-import PropertyBrowseClient from '@/components/property-browse-client';
+import PropertyBrowseClient from '@/components/property/property-browse-client';
 import { getAllProperties } from '../_actions/getAllProperties'
 
 export default async function BrowsePropertiesPage({
