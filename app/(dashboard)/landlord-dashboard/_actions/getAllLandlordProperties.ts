@@ -13,7 +13,6 @@ export const getAllLandlordProperties = async () => {
         const json = await res.json()
         return json?.data?.result ?? []
     } catch (error) {
-        console.log(error)
         return []
     }
 }

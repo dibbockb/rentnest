@@ -23,11 +23,9 @@ export const approveRequest = async (id: string) => {
 
         })
         const result = await res.json();
-        console.log(result)
         return result
 
     } catch (error) {
-        console.log(error)
         return {
             success: false,
             statusCode: 500,
