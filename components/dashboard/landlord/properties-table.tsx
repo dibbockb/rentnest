@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Spinner } from "@/components/ui/spinner"
 import { Pencil, Trash2 } from "lucide-react"
+import { deleteProperty } from "@/app/(dashboard)/landlord-dashboard/_actions/deleteProperty"
+import { EditPropertyModal } from "./edit-property-modal"
 
 type Property = {
     id: string
@@ -26,19 +28,19 @@ type Property = {
 export function PropertiesTable({ properties }: { properties?: Property[] | null }) {
     const router = useRouter()
     const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null)
+    const [editTarget, setEditTarget] = useState<Property | null>(null)
     const [isDeleting, setIsDeleting] = useState(false)
     const safeProperties = Array.isArray(properties) ? properties : []
 
     const handleDelete = async () => {
         if (!deleteTargetId) return
         setIsDeleting(true)
-
-        try {
-            // TODO:delete server action
+        const result = await deleteProperty(deleteTargetId)
+        if (result.success) {
             toast.success("Property deleted.")
             router.refresh()
-        } catch {
-            toast.error("Could not delete property.")
+        } else {
+            toast.error(result.message || "Could not delete property.")
         }
 
         setIsDeleting(false)
@@ -48,6 +50,7 @@ export function PropertiesTable({ properties }: { properties?: Property[] | null
     if (safeProperties.length === 0) {
         return <p className="text-muted-foreground">You haven&apos;t listed any properties yet.</p>
     }
+
 
     return (
         <>
@@ -88,20 +91,23 @@ export function PropertiesTable({ properties }: { properties?: Property[] | null
                             <TableCell>
                                 <div className="flex gap-2 justify-center">
                                     <Button
-                                        size="sm"
+                                        size="lg"
                                         variant="outline"
-                                        onClick={() => {
-                                            // TODO: open edit form/modal for property.id
-                                            toast.info("Edit coming soon.")
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            setEditTarget(property)
                                         }}
                                     >
                                         <Pencil className="w-4 h-4 mr-1" />
                                         Edit
                                     </Button>
                                     <Button
-                                        size="sm"
+                                        size="lg"
                                         variant="destructive"
-                                        onClick={() => setDeleteTargetId(property.id)}
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            setDeleteTargetId(property.id)
+                                        }}
                                     >
                                         <Trash2 className="w-4 h-4 mr-1" />
                                         Delete
@@ -111,7 +117,16 @@ export function PropertiesTable({ properties }: { properties?: Property[] | null
                         </TableRow>
                     ))}
                 </TableBody>
-            </Table>
+            </Table >
+
+            {editTarget && (
+                <EditPropertyModal
+                    property={editTarget}
+                    open={!!editTarget}
+                    onOpenChange={(open) => !open && setEditTarget(null)}
+                />
+            )
+            }
 
             <AlertDialog
                 open={!!deleteTargetId}
@@ -121,8 +136,8 @@ export function PropertiesTable({ properties }: { properties?: Property[] | null
                     <AlertDialogHeader>
                         <AlertDialogTitle>Delete this property?</AlertDialogTitle>
                         <AlertDialogDescription>
-                            This will permanently remove the listing. Any pending requests for
-                            this property will also be affected. This can&apos;t be undone.
+                            This will permanently remove the listing. Any pending requests
+                            for this property will also be affected. This can&apos;t be undone.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>

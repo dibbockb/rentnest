@@ -44,8 +44,6 @@ export function RequestsTable({ requests }: { requests: RentalRequest[] }) {
         redirect(result)
     }
 
-    // success: http://localhost:3000/session/checkout?success=true&session_id=cs_test_a1fsjwaTNukVQ2olWr835JPPbBAAQ272sjnU2fyks2vTLpcDHtiJERRPRz
-
     return (
         <Table>
             <TableHeader>
