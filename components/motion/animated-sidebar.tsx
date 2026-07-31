@@ -1,7 +1,7 @@
 "use client";
 // beui.dev/components/motion/animated-sidebar
 
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Menu } from "lucide-react";
 import {
   AnimatePresence,
   type HTMLMotionProps,
@@ -421,10 +421,10 @@ function MobileSidebar({
           if (event.key !== "Tab") return;
           const focusable = panelRef.current
             ? Array.from(
-                panelRef.current.querySelectorAll<HTMLElement>(
-                  FOCUSABLE_SELECTOR,
-                ),
-              )
+              panelRef.current.querySelectorAll<HTMLElement>(
+                FOCUSABLE_SELECTOR,
+              ),
+            )
             : [];
 
           if (focusable.length === 0) {
@@ -543,9 +543,9 @@ export const AnimatedSidebar = forwardRef<HTMLElement, AnimatedSidebarProps>(
           className={cn(
             "sticky top-0 flex h-svh w-full flex-col overflow-hidden bg-background",
             variant === "sidebar" &&
-              (side === "left" ? "border-border border-r" : "border-border border-l"),
+            (side === "left" ? "border-border border-r" : "border-border border-l"),
             variant === "floating" &&
-              "m-2 h-[calc(100svh-1rem)] rounded-2xl border border-border shadow-sm",
+            "m-2 h-[calc(100svh-1rem)] rounded-2xl border border-border shadow-sm",
             variant === "inset" && "m-2 h-[calc(100svh-1rem)] rounded-2xl",
             panelClassName,
           )}
@@ -562,13 +562,13 @@ export const AnimatedSidebar = forwardRef<HTMLElement, AnimatedSidebarProps>(
 );
 
 export interface AnimatedSidebarTriggerProps
-  extends ButtonHTMLAttributes<HTMLButtonElement> {}
+  extends ButtonHTMLAttributes<HTMLButtonElement> { }
 
 export const AnimatedSidebarTrigger = forwardRef<
   HTMLButtonElement,
   AnimatedSidebarTriggerProps
 >(function AnimatedSidebarTrigger(
-  { className, onClick, type = "button", ...props },
+  { className, onClick, type = "button", children, ...props },
   forwardedRef,
 ) {
   const context = useAnimatedSidebar();
@@ -592,16 +592,19 @@ export const AnimatedSidebarTrigger = forwardRef<
         if (!event.defaultPrevented) context.toggleSidebar();
       }}
       className={cn(
-        "inline-flex size-10 shrink-0 items-center justify-center rounded-xl outline-none",
+        "md:hidden inline-flex size-10 shrink-0 items-center justify-center rounded-xl outline-none",
+        "bg-primary text-primary-foreground shadow-sm",
         "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         className,
       )}
-    />
+    >
+      {children ?? <Menu className="size-4" />}
+    </button>
   );
 });
 
 export interface AnimatedSidebarCloseProps
-  extends ButtonHTMLAttributes<HTMLButtonElement> {}
+  extends ButtonHTMLAttributes<HTMLButtonElement> { }
 
 export const AnimatedSidebarClose = forwardRef<
   HTMLButtonElement,
@@ -634,7 +637,7 @@ export const AnimatedSidebarClose = forwardRef<
 });
 
 export interface AnimatedSidebarRailProps
-  extends ButtonHTMLAttributes<HTMLButtonElement> {}
+  extends ButtonHTMLAttributes<HTMLButtonElement> { }
 
 export const AnimatedSidebarRail = forwardRef<
   HTMLButtonElement,
@@ -670,7 +673,7 @@ export const AnimatedSidebarRail = forwardRef<
 });
 
 export interface AnimatedSidebarInsetProps
-  extends HTMLMotionProps<"main"> {}
+  extends HTMLMotionProps<"main"> { }
 
 export const AnimatedSidebarInset = forwardRef<
   HTMLElement,
