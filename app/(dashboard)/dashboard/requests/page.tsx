@@ -1,5 +1,5 @@
-import { RequestsTable } from "@/components/dashboard/requests-table"
-import { getUserSentRequest } from "../../_actions/tenant/getUserSentRequest"
+import { RequestsTable } from "@/components/dashboard/tenant/requests-table"
+import { getUserSentRequest } from "../_actions/getUserSentRequest"
 
 export default async function MyRequestsPage() {
     const requests = await getUserSentRequest()

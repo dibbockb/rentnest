@@ -10,7 +10,7 @@ export const tenantNavItems = [
 export const landlordNavItems = [
     { label: "Overview", href: "/landlord-dashboard", icon: LayoutDashboard },
     { label: "My Properties", href: "/landlord-dashboard/properties", icon: Home },
-    { label: "Manage Requests", href: "/landlord-dashboard/requests", icon: ClipboardList },
+    { label: "Incoming Requests", href: "/landlord-dashboard/requests", icon: ClipboardList },
 ]
 
 export const adminNavItems = [
