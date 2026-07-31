@@ -63,17 +63,17 @@ export function IncomingRequestsTable({ requests }: { requests?: IncomingRequest
         <>
             <Table>
                 <TableHeader>
-                    <TableRow>
+                    <TableRow className="">
                         <TableHead className="text-left">Property</TableHead>
-                        <TableHead>Tenant</TableHead>
-                        <TableHead>Price</TableHead>
-                        <TableHead>Status</TableHead>
+                        <TableHead className="text-left">Requested By</TableHead>
+                        <TableHead className="text-left">Price</TableHead>
+                        <TableHead className="text-left">Status</TableHead>
                         <TableHead className="text-center">Action</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {safeRequests.map((req) => (
-                        <TableRow key={req.id}>
+                        <TableRow className="" key={req.id}>
                             <TableCell className="flex items-center gap-3">
                                 {req.property?.images?.[0] ? (
                                     <img
@@ -94,7 +94,7 @@ export function IncomingRequestsTable({ requests }: { requests?: IncomingRequest
                             <TableCell>
                                 <Badge variant={statusVariant[req.status]}>{req.status}</Badge>
                             </TableCell>
-                            <TableCell className="text-right">
+                            <TableCell className="">
                                 {req.status === "PENDING" && (
                                     <div className="flex gap-2 justify-center">
                                         <Button size="lg" onClick={() => setPendingAction({ id: req.id, type: "approve" })}>
