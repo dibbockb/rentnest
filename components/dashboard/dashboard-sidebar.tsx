@@ -14,15 +14,12 @@ export function DashboardSidebar({ items, title }: { items: NavItem[]; title: st
     const router = useRouter()
 
     return (
-        <AnimatedSidebar>
-            <AnimatedSidebarHeader>
-                <span className="font-semibold px-2">{title}</span>
-            </AnimatedSidebarHeader>
+        <AnimatedSidebar >
             <AnimatedSidebarContent>
                 <AnimatedSidebarGroup>
                     <AnimatedSidebarMenu>
                         {items.map((item) => (
-                            <AnimatedSidebarMenuItem key={item.href}>
+                            <AnimatedSidebarMenuItem key={item.href} className="">
                                 <AnimatedSidebarMenuButton
                                     icon={<item.icon className="w-4 h-4" />}
                                     isActive={pathname === item.href}
