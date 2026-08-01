@@ -4,10 +4,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
-import { redirect, useRouter } from "next/navigation"
 import { useState } from "react"
 import { Spinner } from "@/components/ui/spinner"
 import { createPaymentSession } from "@/app/(dashboard)/dashboard/_actions/createPaymentSession"
+import { useRouter } from "next/router"
+import { toast } from "sonner"
 
 type RentalRequest = {
     id: string
@@ -22,7 +23,7 @@ type RentalRequest = {
     }
 }
 
-const statusVariant: Record<RentalRequest["status"], "secondary" | "default" | "destructive" | "default"> = {
+const statusVariant: Record<RentalRequest["status"], "secondary" | "default" | "destructive"> = {
     PENDING: "secondary",
     APPROVED: "default",
     REJECTED: "destructive",
@@ -36,12 +37,20 @@ export function RequestsTable({ requests }: { requests: RentalRequest[] }) {
 
     const router = useRouter()
     const [isProcessing, setIsprocessing] = useState(false)
+    const [processingId, setProcessingId] = useState<string | null>(null)
 
     const handleCheckout = async (e: React.MouseEvent, id: string) => {
         e.stopPropagation()
+        setProcessingId(id)
         setIsprocessing(true)
         const result = await createPaymentSession(id)
-        redirect(result)
+        if (!result) {
+            toast.error("Could not create payment session.")
+            setIsprocessing(false)
+            setProcessingId(null)
+            return
+        }
+        router.push(result)
     }
 
     return (
@@ -86,7 +95,7 @@ export function RequestsTable({ requests }: { requests: RentalRequest[] }) {
                         <TableCell className="text-right">
 
                             <Button disabled={(req.status !== "APPROVED")} className="w-25 flex mx-auto" size="lg" onClick={(e) => handleCheckout(e, req.id)}>
-                                {isProcessing ? <Spinner></Spinner> : "Pay Now"}
+                                {processingId === req.id ? <Spinner /> : "Pay Now"}
                             </Button>
 
                         </TableCell>

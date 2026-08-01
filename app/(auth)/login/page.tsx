@@ -16,7 +16,7 @@ export default function LoginPage() {
     const router = useRouter()
     const setUser = useAuthStore((state) => state.setUser)
     const searchParams = useSearchParams()
-    const redirectTo = searchParams.get("redirectTo") ?? null;
+    const redirectTo = searchParams.get("redirectTo") || null;
     const [state, action, pending] = useActionState(loginAction, null)
 
     useEffect(() => {
@@ -31,7 +31,13 @@ export default function LoginPage() {
                 router.refresh()
             }
             else {
-                router.push("/dashboard")
+                const dashboardMap: Record<string, string> = {
+                    TENANT: "/dashboard",
+                    LANDLORD: "/landlord-dashboard",
+                    ADMIN: "/admin-dashboard",
+                }
+                const destination = state.user?.role ? dashboardMap[state.user.role] : "/dashboard"
+                router.push(destination)
                 router.refresh()
             }
             toast.success(state.message || "Logged in successfully.")

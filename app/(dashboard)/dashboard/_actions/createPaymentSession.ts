@@ -16,7 +16,7 @@ export const createPaymentSession = async (rental_req_id: string) => {
         const json = await res.json()
         return json?.data?.sessionUrl || null
     } catch (error) {
-        return []
+        return null
     }
 }
 
