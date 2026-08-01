@@ -15,7 +15,7 @@ export const landlordNavItems = [
 
 export const adminNavItems = [
     { label: "Overview", href: "/admin-dashboard", icon: LayoutDashboard },
-    { label: "Manage Requests", href: "/landlord-dashboard/requests", icon: ClipboardList },
+    { label: "Manage Requests", href: "/admin-dashboard/requests", icon: ClipboardList },
     { label: "Users", href: "/admin-dashboard/users", icon: Users },
     { label: "Properties", href: "/admin-dashboard/properties", icon: House },
 ]

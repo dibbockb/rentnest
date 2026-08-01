@@ -3,11 +3,10 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import Image from "next/image"
 import { redirect, useRouter } from "next/navigation"
 import { useState } from "react"
 import { Spinner } from "@/components/ui/spinner"
-import { createPaymentSession } from "@/app/(dashboard)/dashboard/_actions/createPaymentSession"
+import Image from "next/image"
 
 type RentalRequest = {
     id: string
@@ -29,48 +28,35 @@ const statusVariant: Record<RentalRequest["status"], "secondary" | "default" | "
     COMPLETED: "default",
 }
 
-export function RequestsTable({ requests }: { requests: RentalRequest[] }) {
+export function AllRequestsTable({ requests }: { requests: RentalRequest[] }) {
     if (requests.length === 0) {
-        return <p className="text-muted-foreground">You haven&apos;t sent any rental requests yet.</p>
+        return <p className="text-muted-foreground">No requests yet.</p>
     }
 
     const router = useRouter()
-    const [isProcessing, setIsprocessing] = useState(false)
-
-    const handleCheckout = async (e: React.MouseEvent, id: string) => {
-        e.stopPropagation()
-        setIsprocessing(true)
-        const result = await createPaymentSession(id)
-        redirect(result)
-    }
-
     return (
         <Table>
             <TableHeader>
                 <TableRow>
                     <TableHead>Property</TableHead>
                     <TableHead>Price</TableHead>
-                    <TableHead>Created at</TableHead>
+                    <TableHead>Date</TableHead>
                     <TableHead>Status</TableHead>
-                    <TableHead className="text-right">Action</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
                 {requests.map((req) => (
                     <TableRow key={req.id} onClick={() => { (router.push(`/property/${req.property_id}`)) }}>
                         <TableCell className="flex items-center gap-3">
-                            <span className="w-12 h-12 rounded-md bg-muted">
-                                {/* {req.property.images ??
-                                    <img
-                                        width={50}
-                                        height={50}
-                                        src={req.property.images[0]}
-                                        alt={req.property.location}
-                                        className="w-12 h-12 rounded-md object-cover"
-                                    />} */}
-
-                                {/* //TODO */}
-                            </span>
+                            {req.property.images?.[0] ? (
+                                <Image
+                                    width={50}
+                                    height={50}
+                                    src={req.property.images[0]}
+                                    alt={req.property.location}
+                                    className="w-12 h-12 rounded-md object-cover"
+                                />
+                            ) : <span className="w-12 h-12 rounded-md object-cover bg-secondary"></span>}
                             {req.property.location}
                         </TableCell>
                         <TableCell>$ {req.property.price.toLocaleString()}</TableCell>
@@ -86,9 +72,7 @@ export function RequestsTable({ requests }: { requests: RentalRequest[] }) {
                         </TableCell>
                         <TableCell className="text-right">
 
-                            <Button disabled={(req.status !== "APPROVED")} className="w-25" size="lg" onClick={(e) => handleCheckout(e, req.id)}>
-                                {isProcessing ? <Spinner></Spinner> : "Pay Now"}
-                            </Button>
+
 
                         </TableCell>
                     </TableRow>
