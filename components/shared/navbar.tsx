@@ -15,15 +15,18 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { toast } from 'sonner'
 import { logoutUser } from '@/app/(auth)/_actions/authActions'
+import { useRouter } from 'next/navigation'
 
 export function Navbar() {
     const { user, logout } = useAuthStore()
     const [isOpen, setIsOpen] = useState(false)
+    const router = useRouter()
 
     const handleLogout = async () => {
         logoutUser()
         logout()
         toast.success(`Logged out.`)
+        router.push(`/`)
     }
 
     return (
@@ -146,10 +149,7 @@ export function Navbar() {
                                         variant="ghost"
                                         size="sm"
                                         className="w-full text-center gap-2 hover:text-destructive h-8 "
-                                        onClick={() => {
-                                            logout()
-                                            setIsOpen(false)
-                                        }}
+                                        onClick={handleLogout}
                                     >
                                         <LogOut className="w-4 h-10" />
                                         Logout
