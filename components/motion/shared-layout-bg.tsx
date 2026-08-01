@@ -63,9 +63,9 @@ export const SharedLayoutBg = forwardRef<HTMLElement, SharedLayoutBgProps>(
     },
     forwardedRef,
   ) {
-  const [activeId, setActiveId] = useState<string | null>(null);
-  const uid = useId();
-  const reduce = useReducedMotion();
+    const [activeId, setActiveId] = useState<string | null>(null);
+    const uid = useId();
+    const reduce = useReducedMotion();
 
     const renderedChildren = Children.toArray(children)
       .filter(isValidElement)
@@ -106,7 +106,7 @@ export const SharedLayoutBg = forwardRef<HTMLElement, SharedLayoutBgProps>(
                       layoutId={`shared-bg-${uid}`}
                       transition={reduce ? { duration: 0 } : SPRING_LAYOUT}
                       className={cn(
-                        "pointer-events-none h-full w-full rounded-2xl bg-primary/[0.06]",
+                        "pointer-events-none h-full w-full rounded-2xl bg-primary/6",
                         pillClassName,
                       )}
                     />

@@ -21,9 +21,10 @@ export function DashboardSidebar({ items, title }: { items: NavItem[]; title: st
                         {items.map((item) => (
                             <AnimatedSidebarMenuItem key={item.href} className="">
                                 <AnimatedSidebarMenuButton
-                                    icon={<item.icon className="w-4 h-4" />}
+                                    icon={<item.icon className="w-5 h-5" />}
                                     isActive={pathname === item.href}
                                     onSelect={() => router.push(item.href)}
+                                    className="text-base h-10"
                                 >
                                     {item.label}
                                 </AnimatedSidebarMenuButton>

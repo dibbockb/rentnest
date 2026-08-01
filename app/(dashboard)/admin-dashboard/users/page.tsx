@@ -1,7 +1,7 @@
 import { AllUsersTable } from "@/components/dashboard/admin/users-table"
 import { getAllUsers } from "../_actions/getAllUsers"
 
-export default async function IncomingRequestsPage() {
+export default async function AllUsersPage() {
     const users = await getAllUsers()
 
     return (
