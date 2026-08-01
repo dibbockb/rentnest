@@ -52,7 +52,7 @@ export function RequestsTable({ requests }: { requests: RentalRequest[] }) {
                     <TableHead>Price</TableHead>
                     <TableHead>Created at</TableHead>
                     <TableHead>Status</TableHead>
-                    <TableHead className="text-right">Action</TableHead>
+                    <TableHead className="text-center">Action</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
@@ -60,16 +60,15 @@ export function RequestsTable({ requests }: { requests: RentalRequest[] }) {
                     <TableRow key={req.id} onClick={() => { (router.push(`/property/${req.property_id}`)) }}>
                         <TableCell className="flex items-center gap-3">
                             <span className="w-12 h-12 rounded-md bg-muted">
-                                {/* {req.property.images ??
-                                    <img
+                                {req.property.images?.[0] ? (
+                                    <Image
                                         width={50}
                                         height={50}
                                         src={req.property.images[0]}
                                         alt={req.property.location}
                                         className="w-12 h-12 rounded-md object-cover"
-                                    />} */}
-
-                                {/* //TODO */}
+                                    />
+                                ) : <span className="w-12 h-12 rounded-md object-cover bg-secondary">{req.property.location}</span>}
                             </span>
                             {req.property.location}
                         </TableCell>
@@ -86,7 +85,7 @@ export function RequestsTable({ requests }: { requests: RentalRequest[] }) {
                         </TableCell>
                         <TableCell className="text-right">
 
-                            <Button disabled={(req.status !== "APPROVED")} className="w-25" size="lg" onClick={(e) => handleCheckout(e, req.id)}>
+                            <Button disabled={(req.status !== "APPROVED")} className="w-25 flex mx-auto" size="lg" onClick={(e) => handleCheckout(e, req.id)}>
                                 {isProcessing ? <Spinner></Spinner> : "Pay Now"}
                             </Button>
 
