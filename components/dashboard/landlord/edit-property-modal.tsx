@@ -73,7 +73,7 @@ export function EditPropertyModal({
                     </div>
 
                     <div>
-                        <label className="text-sm font-medium block mb-1">Monthly Rent (৳)</label>
+                        <label className="text-sm font-medium block mb-1">Monthly Rent ($)</label>
                         <Input
                             type="number"
                             {...register("price", { valueAsNumber: true })}
