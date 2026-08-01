@@ -81,7 +81,7 @@ export async function proxy(request: NextRequest) {
             return NextResponse.redirect(new URL(getDashboardUrl(userRole), request.url))
         }
     }
-    if (pathName === "/dashboard") {
+    if (pathName.startsWith("/dashboard")) {
         if (userRole !== "TENANT") {
             return NextResponse.redirect(new URL(getDashboardUrl(userRole), request.url))
         }
