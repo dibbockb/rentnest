@@ -7,7 +7,7 @@ import { tenantNavItems } from "@/components/dashboard/shared/dashboard-items"
 export default function LandlordDashboardLayout({ children }: { children: React.ReactNode }) {
     return (
         <AnimatedSidebarProvider>
-            <DashboardSidebar items={tenantNavItems} title="Tentant" />
+            <DashboardSidebar items={tenantNavItems} title="Tenant" />
             <AnimatedSidebarInset>
                 <AnimatedSidebarTrigger className="m-2" />
                 {children}
