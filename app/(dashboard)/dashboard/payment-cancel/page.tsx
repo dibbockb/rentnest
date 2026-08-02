@@ -12,8 +12,8 @@ const Success = () => {
                 <div className="flex items-center justify-center min-h-[60vh]">
                     <div className="text-center space-y-6">
                         <div>
-                            <h1 className="text-5xl sm:text-5xl font-medium text-foreground mb-2">Success!</h1>
-                            <h2 className="text-2xl sm:text-3xl font-semibold text-foreground mb-2">Payment Completed!</h2>
+                            <h1 className="text-5xl sm:text-5xl font-medium text-foreground mb-2">Cancel!</h1>
+                            <h2 className="text-2xl sm:text-3xl font-semibold text-foreground mb-2">Payment Canceled!</h2>
                         </div>
 
                         <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">

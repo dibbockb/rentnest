@@ -7,8 +7,8 @@ import Image from "next/image"
 import { useState } from "react"
 import { Spinner } from "@/components/ui/spinner"
 import { createPaymentSession } from "@/app/(dashboard)/dashboard/_actions/createPaymentSession"
-import { useRouter } from "next/router"
 import { toast } from "sonner"
+import { useRouter } from "next/navigation"
 
 type RentalRequest = {
     id: string
@@ -35,9 +35,9 @@ export function RequestsTable({ requests }: { requests: RentalRequest[] }) {
         return <p className="text-muted-foreground">You haven&apos;t sent any rental requests yet.</p>
     }
 
-    const router = useRouter()
     const [isProcessing, setIsprocessing] = useState(false)
     const [processingId, setProcessingId] = useState<string | null>(null)
+    const router = useRouter()
 
     const handleCheckout = async (e: React.MouseEvent, id: string) => {
         e.stopPropagation()
