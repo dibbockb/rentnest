@@ -3,7 +3,6 @@ import { LayoutDashboard, Home, Users, ClipboardList, BanknoteCheck, ChartNoAxes
 export const tenantNavItems = [
     { label: "Overview", href: "/dashboard", icon: LayoutDashboard },
     { label: "My Requests", href: "/dashboard/requests", icon: ClipboardList },
-    { label: "My Reviews", href: "/dashboard/my-reviews", icon: ChartNoAxesGantt },
     { label: "Payment History", href: "/dashboard/payment-history", icon: BanknoteCheck },
 ]
 
