@@ -15,6 +15,7 @@ import { Spinner } from '@/components/ui/spinner'
 import { registerAction } from '../_actions/authActions'
 import { useAuthStore } from '@/lib/useAuthStore'
 import jwt from "jsonwebtoken"
+import { BlurFade } from '@/components/motion/blur-fade'
 
 
 export default function RegisterPage() {
@@ -61,7 +62,7 @@ export default function RegisterPage() {
     }
 
     return (
-        <div className="min-h-screen bg-background flex items-center justify-center px-4 py-12">
+        <BlurFade> <div className="min-h-screen bg-background flex items-center justify-center px-4 py-12">
             <div className="w-full max-w-md">
                 <Link href="/" className="flex items-center justify-center gap-2 mb-8">
                     <Home className="w-6 h-6 text-primary" />
@@ -189,6 +190,8 @@ export default function RegisterPage() {
                     </Link>
                 </div>
             </div>
-        </div>
+        </div></BlurFade>
+
+
     )
 }

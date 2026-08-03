@@ -1,6 +1,7 @@
 import { getAllUsers } from "./_actions/getAllUsers"
 import { getAllProperties } from "./_actions/getAllProperties"
 import { getAllRequests } from "./_actions/getAllRequests"
+import { BlurFade } from "@/components/motion/blur-fade"
 
 export default async function AdminDashboardPage() {
     const { users } = await getAllUsers()
@@ -14,7 +15,7 @@ export default async function AdminDashboardPage() {
     const pendingRequests = requests.filter((r: any) => r.status === "PENDING").length
 
     return (
-        <div className="p-6 space-y-6">
+        <BlurFade><div className="p-6 space-y-6">
             <h1 className="text-2xl font-bold">Overview</h1>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="rounded-xl border p-4">
@@ -30,6 +31,6 @@ export default async function AdminDashboardPage() {
                     <p className="text-2xl font-bold">{pendingRequests}</p>
                 </div>
             </div>
-        </div>
+        </div></BlurFade>
     )
 }

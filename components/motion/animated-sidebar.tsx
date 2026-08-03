@@ -8,7 +8,7 @@ import {
   motion,
   useReducedMotion,
   type Variants,
-} from "motion/react";
+} from "framer-motion";
 import {
   type ButtonHTMLAttributes,
   type CSSProperties,

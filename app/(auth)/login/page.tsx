@@ -13,6 +13,7 @@ import { loginAction } from '../_actions/authActions'
 import { Spinner } from '@/components/ui/spinner'
 import { useAuthStore } from '@/lib/useAuthStore'
 import { LoginSchema, type LoginInput } from '@/lib/schemas/login'
+import { BlurFade } from '@/components/motion/blur-fade'
 
 export default function LoginPage() {
     const router = useRouter()
@@ -53,7 +54,7 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="min-h-screen bg-background flex items-center justify-center px-4 py-12">
+        <BlurFade><div className="min-h-screen bg-background flex items-center justify-center px-4 py-12">
             <div className="w-full max-w-md">
                 <Link href="/" className="flex items-center justify-center gap-2 mb-8">
                     <Home className="w-6 h-6 text-primary" />
@@ -130,6 +131,8 @@ export default function LoginPage() {
                     </Link>
                 </div>
             </div>
-        </div>
+        </div></BlurFade>
+
+
     )
 }

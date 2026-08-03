@@ -20,6 +20,7 @@ import {
 } from '@/components/ui/alert-dialog'
 import { submitRequest } from '@/app/(properties)/_actions/submitRequest'
 import { Spinner } from '../ui/spinner'
+import { BlurFade } from '../motion/blur-fade'
 
 export default function PropertyDetailsPage({ property }: { property: IProperty }) {
     const [liked, setLiked] = useState(false)
@@ -77,7 +78,7 @@ export default function PropertyDetailsPage({ property }: { property: IProperty 
         <div className="min-h-screen bg-background">
             <Navbar />
 
-            <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <BlurFade><main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <Link href="/browse">
                     <Button variant="ghost" className="gap-2 mb-6 px-3 py-2">
                         <ArrowLeft className="w-4 h-4" />
@@ -301,7 +302,9 @@ export default function PropertyDetailsPage({ property }: { property: IProperty 
                         </div>
                     </div>
                 </div>
-            </main>
+            </main></BlurFade>
+
+
         </div>
     )
 }
