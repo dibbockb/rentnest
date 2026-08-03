@@ -1,8 +1,9 @@
 'use client'
 
-import { useActionState, useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -11,40 +12,45 @@ import { Mail, Lock, Home } from 'lucide-react'
 import { loginAction } from '../_actions/authActions'
 import { Spinner } from '@/components/ui/spinner'
 import { useAuthStore } from '@/lib/useAuthStore'
+import { LoginSchema, type LoginInput } from '@/lib/schemas/login'
 
 export default function LoginPage() {
     const router = useRouter()
     const setUser = useAuthStore((state) => state.setUser)
     const searchParams = useSearchParams()
-    const redirectTo = searchParams.get("redirectTo") || null;
-    const [state, action, pending] = useActionState(loginAction, null)
+    const redirectTo = searchParams.get("redirectTo")
 
-    useEffect(() => {
-        if (!state) return
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isSubmitting },
+    } = useForm<LoginInput>({
+        resolver: zodResolver(LoginSchema),
+    })
 
-        if (state.success) {
-            if (state.user) {
-                setUser(state.user)
+    const onSubmit = async (data: LoginInput) => {
+        const state = await loginAction(data)
+
+        if (state?.success) {
+            if (state.user) setUser(state.user)
+
+            const dashboardMap: Record<string, string> = {
+                TENANT: "/dashboard",
+                LANDLORD: "/landlord-dashboard",
+                ADMIN: "/admin-dashboard",
             }
-            if (redirectTo && typeof redirectTo === "string" && redirectTo.startsWith("/") && !redirectTo.startsWith("//")) {
+
+            if (redirectTo?.startsWith("/") && !redirectTo.startsWith("//")) {
                 router.push(redirectTo)
-                router.refresh()
+            } else {
+                router.push(dashboardMap[state.user?.role] || "/dashboard")
             }
-            else {
-                const dashboardMap: Record<string, string> = {
-                    TENANT: "/dashboard",
-                    LANDLORD: "/landlord-dashboard",
-                    ADMIN: "/admin-dashboard",
-                }
-                const destination = state.user?.role ? dashboardMap[state.user.role] : "/dashboard"
-                router.push(destination)
-                router.refresh()
-            }
+            router.refresh()
             toast.success(state.message || "Logged in successfully.")
         } else {
-            toast.error(state.message || "Unable to login.")
+            toast.error(state?.message || "Unable to login.")
         }
-    }, [state, setUser])
+    }
 
     return (
         <div className="min-h-screen bg-background flex items-center justify-center px-4 py-12">
@@ -60,21 +66,21 @@ export default function LoginPage() {
                         Log in to your account
                     </p>
 
-                    <form action={action} className="space-y-4">
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                         <div>
                             <label className="text-sm font-medium text-foreground block mb-2">Email</label>
                             <div className="relative">
                                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                                 <Input
-                                    name="email"
+                                    {...register("email")}
                                     type="email"
-                                    placeholder="jhondoe@gmail.com"
+                                    placeholder="johndoe@gmail.com"
                                     className="pl-10"
                                 />
                             </div>
-                            {/* {errors.email && (
+                            {errors.email && (
                                 <p className="text-sm text-red-500 mt-1">{errors.email.message}</p>
-                            )} */}
+                            )}
                         </div>
 
                         <div>
@@ -82,19 +88,19 @@ export default function LoginPage() {
                             <div className="relative">
                                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                                 <Input
-                                    name="password"
+                                    {...register("password")}
                                     type="password"
                                     placeholder="your strong password"
                                     className="pl-10"
                                 />
                             </div>
-                            {/* {errors.password && (
+                            {errors.password && (
                                 <p className="text-sm text-red-500 mt-1">{errors.password.message}</p>
-                            )} */}
+                            )}
                         </div>
 
-                        <Button type="submit" className="w-full h-10">
-                            {pending ? <Spinner /> : "Log In"}
+                        <Button type="submit" className="w-full h-10" disabled={isSubmitting}>
+                            {isSubmitting ? <Spinner /> : "Log In"}
                         </Button>
                     </form>
 

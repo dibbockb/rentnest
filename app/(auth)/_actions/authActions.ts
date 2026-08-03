@@ -16,9 +16,8 @@ type RegisterState = {
     };
 } | null;
 
-export const loginAction = async (prevState: any, formData: FormData) => {
-    const email = formData.get("email");
-    const password = formData.get("password");
+export const loginAction = async (data: { email: string; password: string }) => {
+    const { email, password } = data
 
     try {
         const res = await fetch(
