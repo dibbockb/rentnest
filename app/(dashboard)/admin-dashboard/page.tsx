@@ -1,16 +1,15 @@
-// app/(dashboard)/admin-dashboard/page.tsx
 import { getAllUsers } from "./_actions/getAllUsers"
 import { getAllProperties } from "./_actions/getAllProperties"
 import { getAllRequests } from "./_actions/getAllRequests"
 
 export default async function AdminDashboardPage() {
-    const [users, properties, requests] = await Promise.all([
-        getAllUsers(),
+    const { users } = await getAllUsers()
+    const [properties, requests] = await Promise.all([
         getAllProperties(),
         getAllRequests(),
     ])
 
-    const totalUsers = users.length
+    const totalUsers = users.length;
     const totalProperties = properties.length
     const pendingRequests = requests.filter((r: any) => r.status === "PENDING").length
 

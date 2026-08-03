@@ -9,7 +9,10 @@ export default async function LandlordDashboardPage() {
 
     const totalProperties = properties.length
     const pendingRequests = requests.filter((r: any) => r.status === "PENDING").length
-    const activeRentals = requests.filter((r: any) => r.status === "APPROVED").length
+
+    const totalEarnings = requests
+        .filter((r: any) => r.status === "APPROVED" || r.status === "COMPLETED")
+        .reduce((sum: number, r: any) => sum + (r.property?.price ?? 0), 0)
 
     return (
         <div className="p-6 space-y-6">
@@ -24,8 +27,8 @@ export default async function LandlordDashboardPage() {
                     <p className="text-2xl font-bold">{pendingRequests}</p>
                 </div>
                 <div className="rounded-xl border p-4">
-                    <p className="text-sm text-muted-foreground">Active Rentals</p>
-                    <p className="text-2xl font-bold">{activeRentals}</p>
+                    <p className="text-sm text-muted-foreground">Total Earnings</p>
+                    <p className="text-2xl font-bold">${totalEarnings.toLocaleString()}</p>
                 </div>
             </div>
         </div>
